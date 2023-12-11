@@ -31,6 +31,22 @@
     THIS SOFTWARE.
 */
 #include "mcc_generated_files/system/system.h"
+static bool I2C1_Callback(i2c_client_transfer_event_t event)
+{
+    /* User has to register callback. Refer example code */
+    switch (event)
+    {
+        case I2C_CLIENT_TRANSFER_EVENT_NONE:          /**< I2C Bus Idle state */
+        case I2C_CLIENT_TRANSFER_EVENT_ADDR_MATCH:        /**< Address match event */
+        case I2C_CLIENT_TRANSFER_EVENT_RX_READY:         /**< Data sent by I2C Host is available */
+        case I2C_CLIENT_TRANSFER_EVENT_TX_READY:          /**< I2C client can respond to data read request from I2C Host */
+        case I2C_CLIENT_TRANSFER_EVENT_STOP_BIT_RECEIVED: /**< I2C stop bit received */
+        case I2C_CLIENT_TRANSFER_EVENT_ERROR:             /**< I2C Bus error occurred */
+        default:
+            break;
+    }
+    return true;
+}
 
 /*
     Main application
@@ -46,7 +62,7 @@ int main(void)
 
     // Enable the Global Interrupts 
     INTERRUPT_GlobalInterruptEnable(); 
-
+    I2C1_CallbackRegister(I2C1_Callback);
     // Disable the Global Interrupts 
     //INTERRUPT_GlobalInterruptDisable(); 
 
